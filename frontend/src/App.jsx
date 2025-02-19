@@ -1,10 +1,9 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import Home from "./home";
 import Recieve from "./Recieve";
 import Upload from "./Upload";
+import {AnimatePresence, motion} from "framer-motion";
 
 function App() {
   const [show, setshow] = useState("Home");
@@ -13,18 +12,20 @@ function App() {
     setshow(newvalue);
   };
 
+
   const render_content = () => {
     switch (show) {
       case "Upload":
-        return <Upload onUpdate={UpdateUser}></Upload>;
+        return <Upload onUpdate={UpdateUser} className="fade-in" />;
       case "Recieve":
-        return <Recieve onUpdate={UpdateUser}></Recieve>;
+        return <Recieve onUpdate={UpdateUser} className="fade-in" />;
       case "Home":
-        return <Home onUpdate={UpdateUser}></Home>;
+      default:
+        return <Home onUpdate={UpdateUser} className="fade-in" />;
     }
   };
 
-  return <>{render_content()}</>;
+  return <div>{render_content()}</div>;
 }
 
 export default App;
