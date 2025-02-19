@@ -1,28 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import Home from "./home";
+import Recieve from "./Recieve";
+import Upload from "./Upload";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [show, setshow] = useState("Home");
 
-  return (
-    <>
-      <h1  className='title'>Share your file </h1>
-     <div className="main">
-      <div className="upload">
-          <button>
-            upload
-          </button>
-      </div>
-      <p className='orclass'> or</p>
-      <div className="recieve">
-        <button>recieve</button>
-      </div>
+  const UpdateUser = (newvalue) => {
+    setshow(newvalue);
+  };
 
-     </div>
-    </>
-  )
+  const render_content = () => {
+    switch (show) {
+      case "Upload":
+        return <Upload onUpdate={UpdateUser}></Upload>;
+      case "Recieve":
+        return <Recieve onUpdate={UpdateUser}></Recieve>;
+      case "Home":
+        return <Home onUpdate={UpdateUser}></Home>;
+    }
+  };
+
+  return <>{render_content()}</>;
 }
 
-export default App
+export default App;
