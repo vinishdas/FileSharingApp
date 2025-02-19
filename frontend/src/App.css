@@ -1,42 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap');
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --primary-color:#3282B8;
+  --seconday-color:#0F4C75;
+  --text-color:#ffffff;
+  --background-color: #1B262C;
+
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.main{
+  /* border: 2px solid green; */
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 100px;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+.title{
+   
+  
+/* border:2px solid green; */
+  
+ padding: 2px;
+ margin: 20px;
+ position: relative;
+ bottom: 150px;
+ font-family:  "Russo One", serif;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
+ .orclass{
+  font-size: 25px;
+   
+  position: relative;
+  bottom: 5px;
+  font-family: "Kode Mono", serif;
+ }
+.upload{
+/* border: 2px solid green; */
+}
+.recieve{
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
 }
+ button{
+  height: 70px;
+  width: 170px;
+  padding: 0px;
+  background-color: var(--primary-color);
+ 
+box-shadow: 18px 15px 85px -15px rgba(15, 76, 117, 0.24);
+transition: all 0.3s ease;
+font-weight:400;
+font-size: 23px;
 
-.card {
-  padding: 2em;
-}
+ }
+button:hover{
+  transform: translate(-5px, -5px);
+  font-weight:600;
+  
+box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71)
 
-.read-the-docs {
-  color: #888;
+
+
 }
+ 
+ 
+
+ 
+ 
