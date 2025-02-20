@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap');
+
+
+.heading{
+    font-size:xxx-large;
+    font-weight: bold;
+    margin-bottom: 69px;
+    font-family:  "Russo One", serif;
+}
+.input{
+    padding:16px;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+.label{
+    display:block;
+    margin-bottom: 8px;
+    font-weight:medium;
+}
+.input2{
+    width:max-content;
+    padding: 8px;
+    border:1px solid gray;
+}
+.input-container{
+    margin-bottom: 23px;
+
+}
