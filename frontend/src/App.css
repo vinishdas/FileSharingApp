@@ -1,19 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap');
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+ 
 
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
+ 
 
 #root {
   max-width: 1280px;
@@ -91,10 +80,32 @@ box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71)
   max-width: 100px;
   font-size: medium;
   font-weight: bold ;
+  padding: 10px 5px 10px 5px;
+  height: auto;
 
 }
  
- 
+@keyframes bounce{
+  0% {
+      transform:  translate(0,0);
+  }
+  25% {
+      transform:  translate(0,-20px) rotate(5deg);
+  }
+  50% {
+      transform:  translate(0,-5px);
+  }
+  75% {
+      transform:  translate(0,-15px) rotate(-5deg);
+  }
+  100% {
+      transform:  translate(0,0);
+  }
+}
+
+.title{
+  animation: bounce2 3s ease-in-out 0s infinite normal none;
+}
 
  
  
