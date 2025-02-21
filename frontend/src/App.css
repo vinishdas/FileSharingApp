@@ -113,26 +113,71 @@ box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71)
   padding: 20px;
   border-radius: 10px;
   border: 2px dashed #555;
-  color: #444;
+  color: var(--primary-color);
   cursor: pointer;
   transition: background .2s ease-in-out, border .2s ease-in-out;
+  min-width: 500px;
+}
+
+input[type="file"]{
+  font-size: 0px;
+} 
+
+.inputFile::file-selector-button{
+  
+  text-decoration: none;
+  font-size: 20px;
+  background-color: #3282B8;
+  border: 1px solid white  ;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.3s ease-in-out;
+  
 }
 
 .drop-container:hover {
-  background: #eee;
+  background:var(--text-color);
   border-color: #111;
 }
 
 .drop-container:hover .drop-title {
   color: #222;
+
+}
+.inputFile::file-selector-button:hover{
+  background-color: black;
+  padding: 15px;
+  font-size: 22px;
+
+
 }
 
 .drop-title {
-  color: #444;
+  color: var(--primary-color);
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   transition: color .2s ease-in-out;
 }
  
- 
+ul{
+  /* border: 2px solid green; */
+  padding: 0px;
+}
+.uploadedFile{
+  list-style: none;
+  
+  border-top:none ;
+  padding: 15px;
+  font-size: 15px;
+  margin-top: 10px ;
+  text-align: left;
+  background-color:#303030a4;
+  border-radius:0.5rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  
+
+
+
+}
