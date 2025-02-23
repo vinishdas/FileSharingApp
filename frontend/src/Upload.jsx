@@ -16,7 +16,7 @@ export default function Upload({ onUpdate }) {
         <span class="drop-title">Drop files here</span>
         or
         <input
-          placeholder="Enter your text..."
+           
           className="inputFile"
           name="file"
           type="file"
