@@ -9,5 +9,5 @@ const schema = new mongoose.Schema({
 
 })
 
-const File = mongoose.model("File", schema);
-module.exports = File;
+const Folder = mongoose.model("Folder", schema);
+module.exports = Folder;

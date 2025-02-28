@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const File = require('./model')
+const multer = require("multer");
+const Folder = require('./model');
+const File = require('./Filemodel')
 const { MdFileCopy } = require('react-icons/md');
 require('dotenv').config();
 
@@ -19,9 +21,13 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(cors());
 app.use(express.json());
 
- app.post("/upload",(req,res)=>{
+ app.post("/upload",async(req,res)=>{
     try{
-        
+        const files = req.body;
+        const fileDoc = await File.insertMany(files.map(file=>({
+            filename: file.filename
+        })));
+
     }
  })
 
