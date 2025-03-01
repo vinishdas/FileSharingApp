@@ -5,7 +5,8 @@ const multer = require("multer");
 const Folder = require('./model');
 const File = require('./Filemodel')
 const { MdFileCopy } = require('react-icons/md');
-const {getRandomString,generateCoupon} = require('./RandomUtil')
+const {getRandomString,generateCoupon} = require('./RandomUtil');
+const {createFolder} = require('./UploadGoFile')
 
 require('dotenv').config();
 
@@ -38,6 +39,8 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + "-" + file.originalname);
     }
 });
+
+
 
 const upload = multer({ storage, limits: { fileSize: 500 * 1024 * 1024 } });
 
