@@ -1,21 +1,22 @@
 const axios = require('axios');
-require('dotenv').config(); 
+require('dotenv').config();
 
-
-async function createFolder(folderName, parentFolderId = null) {
+async function createFolder(folderName, parentFolderId) {
     const API_KEY = process.env.GOFILE_API;
+    console.log('API Key:', API_KEY);
 
-    
-    const response = await axios.post('https://api.gofile.io/createFolder', {
-        parentFolderId: parentFolderId, // Set this to null if it's a root folder
-        name: folderName
+
+    const response = await axios.post('https://api.gofile.io/contents/createFolder', {
+        parentFolderId: parentFolderId,
+        folderName: folderName
     }, {
         headers: {
-            Authorization: API_KEY
+            Authorization: `Bearer ${API_KEY}`, 
+            'Content-Type': 'application/json'
         }
     });
 
     return response.data.data.id; // Returns the folder ID
 }
 
- module.exports = createFolder;
+module.exports = createFolder;
