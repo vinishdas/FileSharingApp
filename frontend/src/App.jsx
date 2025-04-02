@@ -1,3 +1,4 @@
+import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
 import Home from "./home";
@@ -9,6 +10,7 @@ function App() {
   const [show, setshow] = useState("Home");
 
   const UpdateUser = (newvalue) => {
+    console.log("Switching to:", newvalue);
     setshow(newvalue);
   };
 
@@ -25,7 +27,7 @@ function App() {
     }
   };
 
-  return <div>{render_content()}</div>;
+  return (<BrowserRouter><div>{render_content()}</div></BrowserRouter>);
 }
 
 export default App;
