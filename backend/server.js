@@ -162,21 +162,30 @@ app.post("/upload", upload.array("files", 5), async (req, res) => {
 //     return wtToken;
 // }
 
+
+
 async function extractWtTokenFromDownloadPage(downloadPageUrl) {
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: await puppeteer.executablePath(),
+      headless: 'new',
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ],
     });
   
     const page = await browser.newPage();
   
     let wtToken = null;
   
-    // Listen for network requests to capture the WT token
-    page.on("request", (request) => {
+    page.on('request', request => {
       const url = request.url();
-      if (url.includes("/contents/")) {
+      if (url.includes('/contents/')) {
         const match = url.match(/wt=([^&]+)/);
         if (match) {
           wtToken = match[1];
@@ -184,16 +193,15 @@ async function extractWtTokenFromDownloadPage(downloadPageUrl) {
       }
     });
   
-    await page.goto(downloadPageUrl, { waitUntil: "networkidle2" });
-  
-    // Wait a bit for all network requests to go through
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 3000)));
+    await page.goto(downloadPageUrl, { waitUntil: 'networkidle2' });
+    await page.waitForTimeout(3000);
   
     await browser.close();
-    console.log("Extracted wt token:", wtToken);
   
+    console.log("Extracted wt token:", wtToken);
     return wtToken;
   }
+  
 
 app.get("/rec", async (req, res) => {
     try {
