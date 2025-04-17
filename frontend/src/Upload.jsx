@@ -5,6 +5,7 @@ export default function Upload({ onUpdate }) {
   const [files, setFiles] = useState([]);
   const [token, setToken] = useState(null);
   const [copyMsg, setCopyMsg] = useState("");
+  const [isUploading, setIsUploading] = useState(false);  // To manage loading state
 
   const change = (event) => {
     setFiles([...event.target.files]);
@@ -15,6 +16,9 @@ export default function Upload({ onUpdate }) {
 
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
+
+    // Set loading state to true to show animation
+    setIsUploading(true);
 
     try {
       const response = await fetch("http://localhost:5000/upload", {
@@ -29,6 +33,9 @@ export default function Upload({ onUpdate }) {
       }
     } catch (err) {
       console.error("Upload error:", err);
+    } finally {
+      // Reset loading state after upload
+      setIsUploading(false);
     }
   };
 
@@ -36,7 +43,7 @@ export default function Upload({ onUpdate }) {
     try {
       await navigator.clipboard.writeText(token);
       setCopyMsg("Copied!");
-      setTimeout(() => setCopyMsg(""), 1500);
+      setTimeout(() => setCopyMsg(""), 1500);  // Reset the message after 1.5 seconds
     } catch (err) {
       setCopyMsg("Failed to copy!");
     }
@@ -72,15 +79,16 @@ export default function Upload({ onUpdate }) {
 
       {files.length > 0 && (
         <button onClick={handleUpload} className="uploadButton">
-          Upload Files
+          {isUploading ? "Uploading..." : "Upload Files"}
         </button>
       )}
 
       {token && (
         <div className="tokenSection">
           <p>🔑 Token: <strong>{token}</strong></p>
-          <button onClick={copyToClipboard}>Copy Token</button>
-          {copyMsg && <span style={{ marginLeft: "10px" }}>{copyMsg}</span>}
+          <button onClick={copyToClipboard}>
+            {copyMsg ? copyMsg : "Copy Token"}
+          </button>
         </div>
       )}
     </>

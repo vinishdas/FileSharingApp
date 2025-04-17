@@ -16,12 +16,19 @@
     display:block;
     margin-bottom: 8px;
     font-weight:medium;
+    font-size: 20px;
 }
-.input2{
-    width:max-content;
-    padding: 8px;
-    border:1px solid gray;
-}
+.input2 {
+    width: 80%;
+    height: 30px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: transparent;
+    outline: none;
+    transition: all 0.3s ease;
+  }
 .input-container{
     margin-bottom: 23px;
 
