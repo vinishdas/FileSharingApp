@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
-import Home from "./home";
+import Home from "./Home";
 import Recieve from "./Recieve";
 import Upload from "./Upload";
 import {AnimatePresence, motion} from "framer-motion";
