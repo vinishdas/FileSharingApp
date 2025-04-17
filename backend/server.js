@@ -14,6 +14,7 @@ const puppeteer = require("puppeteer"); // instead of puppeteer-core
 
 const archiver = require('archiver');
 const cron = require("node-cron");
+const { chromium } = require('playwright');
 require('dotenv').config();
 
 const app = express();
@@ -162,46 +163,40 @@ app.post("/upload", upload.array("files", 5), async (req, res) => {
 //     return wtToken;
 // }
 
-
-
 async function extractWtTokenFromDownloadPage(downloadPageUrl) {
-    const browser = await puppeteer.launch({
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-gpu'
-      ],
-    });
-  
+    // Launching the headless browser with Playwright
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-  
+
     let wtToken = null;
-  
-    page.on('request', request => {
-      const url = request.url();
-      if (url.includes('/contents/')) {
-        const match = url.match(/wt=([^&]+)/);
-        if (match) {
-          wtToken = match[1];
+
+    // Listen for network responses to capture the WT token
+    page.on('response', response => {
+        const url = response.url();
+        if (url.includes('/contents/')) {
+            const match = url.match(/wt=([^&]+)/);
+            if (match) {
+                wtToken = match[1];
+            }
         }
-      }
     });
-  
-    await page.goto(downloadPageUrl, { waitUntil: 'networkidle2' });
-    await page.waitForTimeout(3000);
-  
+
+    try {
+        // Navigating to the download page
+        await page.goto(downloadPageUrl, { waitUntil: 'networkidle' });
+        // Wait a bit for all network requests to go through (can adjust the time if needed)
+        await page.waitForTimeout(3000);
+    } catch (error) {
+        console.error('Error while navigating or waiting:', error);
+    }
+
+    // Close the browser
     await browser.close();
-  
+
     console.log("Extracted wt token:", wtToken);
     return wtToken;
-  }
-  
+}
+ 
 
 app.get("/rec", async (req, res) => {
     try {
