@@ -12,7 +12,7 @@ const Recieve = ({ onUpdate }) => {
     setIsLoading(true);
   
     try {
-      const response = await fetch(`/rec?token=${token}`);
+      const response = await fetch(`https://filesharingapp-1-k4ij.onrender.com/rec?token=${token}`);
   
       if (!response.ok) {
         const errorText = await response.text(); // Grab error body

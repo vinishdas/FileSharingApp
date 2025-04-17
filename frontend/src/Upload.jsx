@@ -21,7 +21,7 @@ export default function Upload({ onUpdate }) {
     setIsUploading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/upload", {
+      const response = await fetch("https://filesharingapp-1-k4ij.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
