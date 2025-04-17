@@ -11,6 +11,7 @@ const FormData = require("form-data");
 const axios = require("axios");
 const puppeteer = require('puppeteer');
 const archiver = require('archiver');
+const cron = require("node-cron");
 require('dotenv').config();
 
 const app = express();
@@ -159,63 +160,124 @@ async function extractWtTokenFromDownloadPage(downloadPageUrl) {
     return wtToken;
 }
 
-
 app.get("/rec", async (req, res) => {
     try {
-
-        const token = req.query.token;
-        if (!token) {
-            return res.status(400).json({ error: "Token is missing" });
-        }
-
-        // Find all records with this token
-        const folder = await Folder.findOne({ token });
-        console.log("found folder " + folder.folderId);
-        if (folder.length === 0) {
-            return res.status(404).json({ error: "No folders found for this token" });
-        }
-        console.log(folder.downloadUrl);
-        const firstDownloadUrl = folder.downloadUrl.split(",")[0].trim();
-        console.log(firstDownloadUrl);
-        const wtToken = await extractWtTokenFromDownloadPage(firstDownloadUrl);
-
-        if (!wtToken) {
-            return res.status(500).json({ error: "WT token not found very sorry " });
-        }
-
-        const gofileUrl = `https://api.gofile.io/contents/${folder.folderId}?wt=${wtToken}`;
-        const response = await axios.get(gofileUrl, {
-            headers: {
-                Authorization: `Bearer ${API_KEY}`,
-            },
-        });
-        if (response.data.status !== 'ok') {
-            return res.status(500).json({ error: " fetch folder contents" });
-        }else
-        console.log("fetdhed files from the folder and saved in the zip");
-
-        const child = response.data.data.children;
-        const filee = Object.values(child);
-        if (filee.length == 0) {
-            return res.status(404).json({ error: 'No files in folder' });
-        }
-        res.setHeader('Content-Disposition', 'attachment; filename="download.zip"');
-        res.setHeader('Content-Type', 'application/zip');
-        const archive = archiver('zip', { zlib: { level: 9 } });
-        archive.pipe(res);
-
-
-        for (const file of filee) {
-            const fileStream = await axios.get(file.link, { responseType: 'stream' });
-            archive.append(fileStream.data, { name: file.name });
-        }
-
-        await archive.finalize();
+      const token = req.query.token;
+  
+      if (!token) {
+        return res.status(400).json({ error: "Token is missing" });
+      }
+  
+      // Find the folder by token in the database
+      const folder = await Folder.findOne({ token });
+      if (!folder) {
+        return res.status(404).json({ error: "No folder found for this token" });
+      }
+  
+      // Check if the file has expired
+      const currentDate = new Date();
+      const expireAt = new Date(folder.expireAt);
+      if (currentDate > expireAt) {
+        // If the file has expired, return an error response
+        return res.status(410).json({ error: "The files have expired." });
+      }
+  
+      console.log("Found folder: ", folder.folderId);
+      const firstDownloadUrl = folder.downloadUrl.split(",")[0].trim();
+  
+      // Fetch the WT token
+      const wtToken = await extractWtTokenFromDownloadPage(firstDownloadUrl);
+      if (!wtToken) {
+        return res.status(500).json({ error: "WT token not found" });
+      }
+  
+      const gofileUrl = `https://api.gofile.io/contents/${folder.folderId}?wt=${wtToken}`;
+  
+      // Fetch folder contents from GoFile API
+      const response = await axios.get(gofileUrl, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+        },
+      });
+  
+      if (response.data.status !== 'ok') {
+        return res.status(500).json({ error: "Failed to fetch folder contents" });
+      }
+  
+      const childFiles = response.data.data.children;
+      const files = Object.values(childFiles);
+  
+      if (files.length === 0) {
+        return res.status(404).json({ error: "No files in folder" });
+      }
+  
+      // Set headers to force download the zip file
+      res.setHeader('Content-Disposition', 'attachment; filename="download.zip"');
+      res.setHeader('Content-Type', 'application/zip');
+  
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      archive.pipe(res);
+  
+      // Append each file to the zip archive
+      for (const file of files) {
+        const fileStream = await axios.get(file.link, { responseType: 'stream' });
+        archive.append(fileStream.data, { name: file.name });
+      }
+  
+      await archive.finalize();
+  
     } catch (error) {
-        console.error("toekn not exists", error);
-        res.status(404).json({ error: "token doesn't exists " });
+      console.error("Error occurred: ", error);
+      res.status(500).json({ error: "An error occurred while processing your request" });
     }
-})
+  });
+
+
+
+  cron.schedule('*/10 * * * *', async () => {
+    try {
+      console.log("Checking for expired files...");
+  
+      const currentDate = new Date();
+  
+      // Find all expired files in MongoDB
+      const expiredFiles = await Folder.find({ expireAt: { $lt: currentDate }, isExpired: false });
+  
+      if (expiredFiles.length === 0) {
+        console.log("No expired files found.");
+        return;
+      }
+  
+      for (const file of expiredFiles) {
+        console.log(`Deleting expired file with token: ${file.token}`);
+  
+        // Delete file from GoFile.io
+        const gofileDeleteUrl = `https://api.gofile.io/contents/${file.folderId}`;
+        try {
+          const deleteResponse = await axios.delete(gofileDeleteUrl, {
+            headers: {
+              Authorization: `Bearer ${API_KEY}`,
+            },
+          });
+  
+          if (deleteResponse.data.status === 'ok') {
+            console.log(`File deleted from GoFile.io: ${file.folderId}`);
+          } else {
+            console.log(`Failed to delete file from GoFile.io: ${file.folderId}`);
+          }
+        } catch (deleteError) {
+          console.error(`Error deleting file from GoFile.io: ${file.folderId}`, deleteError);
+        }
+  
+        // Delete file record from MongoDB
+        await Folder.deleteOne({ _id: file._id });
+        console.log(`Deleted file record from MongoDB: ${file._id}`);
+      }
+  
+    } catch (error) {
+      console.error("Error during expired file cleanup: ", error);
+    }
+  });
 
 const PORT = 5000;
 app.listen(PORT, () => {
