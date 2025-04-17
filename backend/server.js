@@ -10,7 +10,7 @@ const createFolder = require('./UploadGoFile');
 const FormData = require("form-data");
 const axios = require("axios");
 // const puppeteer = require('puppeteer');
-const puppeteer = require("puppeteer"); // instead of puppeteer-core
+// const puppeteer = require("puppeteer"); // instead of puppeteer-core
 
 const archiver = require('archiver');
 const cron = require("node-cron");
