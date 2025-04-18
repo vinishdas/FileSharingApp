@@ -224,7 +224,8 @@ app.get("/rec", async (req, res) => {
       const firstDownloadUrl = folder.downloadUrl.split(",")[0].trim();
   
       // Fetch the WT token
-      const wtToken = await extractWtTokenFromDownloadPage(firstDownloadUrl);
+      // const wtToken = await extractWtTokenFromDownloadPage(firstDownloadUrl);
+      const wtToken = '4fd6sg89d7s6';
       if (!wtToken) {
         return res.status(500).json({ error: "WT token not found" });
       }
