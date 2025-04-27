@@ -110,7 +110,7 @@ app.post('/upload', upload.array('files', 5), async (req, res) => {
 
         // Save metadata in MongoDB
         const token = generateCoupon();
-        const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // expire in 24 hours (changed from 10 minutes)
+        const expireAt = new Date(Date.now() +  5 *60 * 1000); // expire in 24 hours (changed from 10 minutes)
 
         const folderData = new Folder({
             folderId: folderName,
@@ -183,7 +183,7 @@ app.get('/status', (req, res) => {
 
 // Cron job to delete expired files every hour (changed from 10 minutes)
 const cron = require('node-cron');
-cron.schedule('0 * * * *', async () => {
+cron.schedule('*/10 * * * *', async () => {
     try {
         console.log("Checking for expired files...");
 
