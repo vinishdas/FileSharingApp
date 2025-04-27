@@ -93,7 +93,7 @@ const Receive = ({ onUpdate }) => {
           </form>
         )}
 
-        {files.length == 0 && (
+        {files.length > 0 && (
           <>
             <h2
               style={{
