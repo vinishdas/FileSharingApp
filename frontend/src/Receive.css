@@ -1,42 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap");
 
+.heading {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: bold;
+  margin-bottom: 40px;
+  font-family: "Russo One", serif;
+}
 
-.heading{
-    font-size:xxx-large;
-    font-weight: bold;
-    margin-bottom: 69px;
-    font-family:  "Russo One", serif;
+.input {
+  padding: 16px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto 20px;
 }
-.input{
-    padding:16px;
-    max-width: 500px;
-    margin-bottom: 20px;
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: medium;
+  font-size: clamp(1rem, 3vw, 1.2rem);
 }
-.label{
-    display:block;
-    margin-bottom: 8px;
-    font-weight:medium;
-    font-size: 20px;
-}
+
 .input2 {
-    width: 80%;
-    height: 30px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: transparent;
-    outline: none;
-    transition: all 0.3s ease;
-  }
-.input-container{
-    margin-bottom: 23px;
+  width: 100%;
+  height: 50px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: transparent;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
 
+.input-container {
+  margin-bottom: 23px;
+  width: 100%;
 }
 
 .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.submit-button {
+  margin: 0 auto;
+  display: block;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .heading {
+    margin-bottom: 30px;
   }
-  
+
+  .input {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    margin-bottom: 20px;
+  }
+
+  .input {
+    padding: 8px;
+  }
+
+  .input2 {
+    padding: 10px 15px;
+  }
+}

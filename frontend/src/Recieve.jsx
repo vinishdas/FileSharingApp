@@ -43,10 +43,9 @@ const Receive = ({ onUpdate }) => {
         if (!file.dir) {
           const fileData = await file.async("blob")
           extractedFiles.push({ name: relativePath, blob: fileData })
-          setFiles(prev => [...prev, { name: relativePath, blob: fileData }])
+          setFiles((prev) => [...prev, { name: relativePath, blob: fileData }])
         }
       })
-
     } catch (error) {
       console.error("Error processing ZIP:", error)
       setErrorMessage(error.message || "Failed to fetch files.")
@@ -56,7 +55,7 @@ const Receive = ({ onUpdate }) => {
   }
 
   const downloadAll = () => {
-    files.forEach(file => {
+    files.forEach((file) => {
       saveAs(file.blob, file.name)
     })
   }
@@ -69,55 +68,55 @@ const Receive = ({ onUpdate }) => {
 
       <div className="input">
         <h1 className="heading">Receive Files</h1>
-      {files.length==0 &&(
-        <form onSubmit={handleTokenSubmit} className="form-container">
-          <div className="input-container">
-            <label htmlFor="token" className="label">Enter your token</label>
-            <input
-              type="text"
-              id="token"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              className="input2"
-              placeholder="Enter the file access token"
-              required
+        {files.length == 0 && (
+          <form onSubmit={handleTokenSubmit} className="form-container">
+            <div className="input-container">
+              <label htmlFor="token" className="label">
+                Enter your token
+              </label>
+              <input
+                type="text"
+                id="token"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                className="input2"
+                placeholder="Enter the file access token"
+                required
               />
-          </div>
+            </div>
 
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          <button type="submit" disabled={isLoading} className="submit-button">
-            {isLoading ? "Loading..." : "Access Files"}
-          </button>
-        </form>
+            <button type="submit" disabled={isLoading} className="submit-button">
+              {isLoading ? "Loading..." : "Access Files"}
+            </button>
+          </form>
+        )}
 
-)}
-        {files.length > 0 && (
+        {files.length == 0 && (
           <>
-           <h2
-             style={{
-               fontSize: "25px",
-               // Green color for the button
-             }}
-             className="heading"
-           >
-             Files Ready
-           </h2>
+            <h2
+              style={{
+                fontSize: "clamp(1.5rem, 4vw, 2rem)",
+              }}
+              className="heading"
+            >
+              Files Ready
+            </h2>
 
-           <button
-             style={{
-               padding: "5px",
-               fontSize: "16px",
-               // Green color for the button
-
-               cursor: "pointer",
-             }}
-             className="submit-button"
-             onClick={downloadAll}
-           >
-             Download All Files
-           </button>
-         </>
+            <button
+              style={{
+                padding: "10px",
+                fontSize: "clamp(0.9rem, 3vw, 1rem)",
+                cursor: "pointer",
+                
+              }}
+              className="submit-button"
+              onClick={downloadAll}
+            >
+              Download All Files
+            </button>
+          </>
         )}
       </div>
     </>

@@ -1,104 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap');
-
- 
-
- 
+@import url("https://fonts.googleapis.com/css2?family=Gloock&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Kode+Mono:wght@400..700&family=Roboto:wght@400;500&family=Russo+One&display=swap");
 
 #root {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
-  --primary-color:#3282B8;
-  --seconday-color:#0F4C75;
-  --text-color:#ffffff;
-  --background-color: #1B262C;
-
+  --primary-color: #3282b8;
+  --seconday-color: #0f4c75;
+  --text-color: #ffffff;
+  --background-color: #1b262c;
 }
 
-.main{
+.main {
   /* border: 2px solid green; */
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 100px;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
 }
-.title{
-   
-  
-/* border:2px solid green; */
-  
- padding: 2px;
- margin: 20px;
- position: relative;
- bottom: 150px;
- font-family:  "Russo One", serif;
-
+.title {
+  padding: 2px;
+  margin: 20px;
+  position: relative;
+  bottom: 50px;
+  font-family: "Russo One", serif;
+  font-size: clamp(2rem, 5vw, 3rem);
 }
- .orclass{
-  font-size: 25px;
-   
+.orclass {
+  font-size: clamp(1rem, 3vw, 1.5rem);
   position: relative;
   bottom: 5px;
   font-family: "Kode Mono", serif;
- }
-
- button{
-  height: 70px;
-  width: 170px;
-  padding: 0px;
-  background-color: var(--primary-color);
- 
-box-shadow: 18px 15px 85px -15px rgba(15, 76, 117, 0.002);
-transition: all 0.3s ease;
-font-weight:400;
-font-size: 1.5rem;
-
- }
-button:hover{
-  transform: translate(-5px, -5px);
-  font-weight:600;
-  
-box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71)
-
-
-
 }
-.uploadBack{
- 
-  position: absolute;
-  top:30px;
-  left: 30px;
-  border-radius: 50px;
-  width: 30%;
-  max-width: 100px;
-  font-size: medium;
-  font-weight: bold ;
-  padding: 10px 5px 10px 5px;
+
+button {
   height: auto;
-
+  width: 170px;
+  padding: 15px;
+  background-color: var(--primary-color);
+  box-shadow: 18px 15px 85px -15px rgba(15, 76, 117, 0.002);
+  transition: all 0.3s ease;
+  font-weight: 400;
+  font-size: clamp(1rem, 3vw, 1.5rem);
 }
- 
-@keyframes bounce{
+button:hover {
+  transform: translate(-5px, -5px);
+  font-weight: 600;
+  box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71);
+}
+.uploadBack {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  border-radius: 50px;
+  width: 100px;
+  max-width: 100px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 10px;
+  height: auto;
+}
+
+@keyframes bounce {
   0% {
-      transform:  translate(0,0);
+    transform: translate(0, 0);
   }
   25% {
-      transform:  translate(0,-20px) rotate(5deg);
+    transform: translate(0, -20px) rotate(5deg);
   }
   50% {
-      transform:  translate(0,-5px);
+    transform: translate(0, -5px);
   }
   75% {
-      transform:  translate(0,-15px) rotate(-5deg);
+    transform: translate(0, -15px) rotate(-5deg);
   }
   100% {
-      transform:  translate(0,0);
+    transform: translate(0, 0);
   }
 }
 
-.title{
+.title {
   animation: bounce2 3s ease-in-out 0s infinite normal none;
 }
 
@@ -116,68 +101,158 @@ box-shadow: 5px 5px 11px -2px rgba(28, 135, 206, 0.71)
   color: var(--primary-color);
   cursor: pointer;
   transition: background .2s ease-in-out, border .2s ease-in-out;
-  min-width: 500px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-input[type="file"]{
+input[type="file"] {
   font-size: 0px;
-} 
+}
 
-.inputFile::file-selector-button{
-  
+.inputFile::file-selector-button {
   text-decoration: none;
-  font-size: 20px;
-  background-color: #3282B8;
-  border: 1px solid white  ;
+  font-size: 1rem;
+  background-color: #3282b8;
+  border: 1px solid white;
   border-radius: 10px;
   padding: 10px;
   transition: all 0.3s ease-in-out;
-  
 }
 
 .drop-container:hover {
-  background:var(--text-color);
+  background: var(--text-color);
   border-color: #111;
 }
 
 .drop-container:hover .drop-title {
   color: #222;
-
 }
-.inputFile::file-selector-button:hover{
+
+.inputFile::file-selector-button:hover {
   background-color: black;
-  padding: 15px;
-  font-size: 22px;
-
-
+  padding: 12px;
+  font-size: 1.1rem;
 }
 
 .drop-title {
   color: var(--primary-color);
-  font-size: 20px;
+  font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
   transition: color .2s ease-in-out;
 }
- 
-ul{
+
+ul {
   /* border: 2px solid green; */
   padding: 0px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
-.uploadedFile{
+.uploadedFile {
   list-style: none;
-  
-  border-top:none ;
+  border-top: none;
   padding: 15px;
   font-size: 15px;
-  margin-top: 10px ;
+  margin-top: 10px;
   text-align: left;
-  background-color:#303030a4;
-  border-radius:0.5rem;
+  background-color: #303030a4;
+  border-radius: 0.5rem;
   font-weight: bold;
   letter-spacing: 0.5px;
-  
+  word-break: break-word;
+}
 
+.progress-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
+.progress-bar {
+  height: 20px;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
 
+.progress-text {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.tokenSection {
+  margin: 20px auto;
+  padding: 15px;
+  background-color: rgba(50, 130, 184, 0.1);
+  border-radius: 10px;
+  max-width: 500px;
+  word-break: break-all;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.uploadButton,
+.resetButton {
+  margin: 20px auto;
+  display: block;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .main {
+    gap: 20px;
+  }
+
+  .title {
+    bottom: 30px;
+    margin: 10px;
+  }
+
+  button {
+    width: 140px;
+  }
+
+  .uploadBack {
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  .main {
+    gap: 15px;
+  }
+
+  .title {
+    bottom: 20px;
+  }
+
+  button {
+    width: 120px;
+    padding: 10px;
+  }
+
+  .drop-container {
+    height: 180px;
+    padding: 15px;
+  }
+
+  .uploadedFile {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
