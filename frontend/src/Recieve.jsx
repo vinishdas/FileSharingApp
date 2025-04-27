@@ -1,80 +1,105 @@
-import "./App.css";
-import "./Receive.css";
-import { useState } from "react";
-import { saveAs } from "file-saver";
+"use client"
 
-const Recieve = ({ onUpdate }) => {
-  const [token, setToken] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+import "./App.css"
+import "./Receive.css"
+import { useState } from "react"
+
+// Get the API URL from environment variables or use a default
+const API_URL =  "https://filesharingapp-1-k4ij.onrender.com"
+
+const Receive = ({ onUpdate }) => {
+  const [token, setToken] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const [downloadStarted, setDownloadStarted] = useState(false)
 
   const handleTokenSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-  
-    try {
-      const response = await fetch(`https://filesharingapp-1-k4ij.onrender.com/rec?token=${token}`);
-  
-      if (!response.ok) {
-        const errorText = await response.text(); // Grab error body
-        throw new Error(`Server error: ${errorText}`);
-      }
-  
-      // Check for correct content type
-      const contentType = response.headers.get("Content-Type");
-      if (!contentType || !contentType.includes("application/zip")) {
-        const errorText = await response.text(); // May be HTML or JSON
-        throw new Error(`Expected ZIP but got: ${contentType}\n${errorText}`);
-      }
-  
-      const blob = await response.blob();
-      const zipFileName = `${token}.zip`;
-  
-      saveAs(blob, zipFileName);
-    } catch (error) {
-      console.error("Error downloading ZIP:", error);
-      alert("An error occurred. Please check the token and try again.");
-    } finally {
-      setIsLoading(false);
+    e.preventDefault()
+    setIsLoading(true)
+    setErrorMessage("") // Clear previous errors
+    setDownloadStarted(false)
+
+    if (!token.trim()) {
+      setErrorMessage("Token cannot be empty")
+      setIsLoading(false)
+      return
     }
-  };
-  
+
+    try {
+      // First check if the token is valid without redirecting
+      const checkResponse = await fetch(`${API_URL}/rec?token=${token}`, {
+        method: "HEAD",
+      })
+
+      if (!checkResponse.ok) {
+        if (checkResponse.status === 404) {
+          throw new Error("Invalid token. Please check and try again.")
+        } else if (checkResponse.status === 410) {
+          throw new Error("This file has expired and is no longer available.")
+        } else {
+          throw new Error(`Server error: ${checkResponse.status}`)
+        }
+      }
+
+      // If token is valid, start the download
+      setDownloadStarted(true)
+
+      // Use window.location to trigger the download
+      window.location.href = `${API_URL}/rec?token=${token}`
+
+      // Reset the token after successful download initiation
+      setTimeout(() => {
+        setToken("")
+        setIsLoading(false)
+      }, 2000)
+    } catch (error) {
+      console.error("Error downloading ZIP:", error)
+      setErrorMessage(error.message || "An error occurred. Please check the token and try again.")
+      setIsLoading(false)
+    }
+  }
 
   return (
     <>
-    <button className="uploadBack" onClick={() => onUpdate("Home")}>
-      Back
-    </button>
-  
-    <div className="input">
-      <h1 className="heading">Receive Files</h1>
-      <form onSubmit={handleTokenSubmit} className="form-container">
-        <div className="input-container">
-          <label htmlFor="token" className="label">
-            Enter your token
-          </label>
-          <input
-            type="text"
-            id="token"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            className="input2"
-            placeholder="Enter the file access token"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="submit-button"
-        >
-          {isLoading ? "Verifying..." : "Access Files"}
-        </button>
-      </form>
-    </div>
-  </>
-  
-  );
-};
+      <button className="uploadBack" onClick={() => onUpdate("Home")}>
+        Back
+      </button>
 
-export default Recieve;
+      <div className="input">
+        <h1 className="heading">Receive Files</h1>
+        <form onSubmit={handleTokenSubmit} className="form-container">
+          <div className="input-container">
+            <label htmlFor="token" className="label">
+              Enter your token
+            </label>
+            <input
+              type="text"
+              id="token"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              className="input2"
+              placeholder="Enter the file access token (e.g., ABCD-EFGH-IJKL)"
+              required
+            />
+          </div>
 
+          {/* Show error message */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+          {/* Show success message */}
+          {downloadStarted && (
+            <p className="success-message">
+              Download started! If it doesn't begin automatically, please check your browser settings.
+            </p>
+          )}
+
+          <button type="submit" disabled={isLoading} className="submit-button">
+            {isLoading ? "Verifying..." : "Access Files"}
+          </button>
+        </form>
+      </div>
+    </>
+  )
+}
+
+export default Receive
