@@ -3,21 +3,23 @@
 import "./App.css"
 import "./Receive.css"
 import { useState } from "react"
+import JSZip from "jszip"
+import { saveAs } from "file-saver"
 
-// Get the API URL from environment variables or use a default
-const API_URL =  "https://filesharingapp-1-k4ij.onrender.com"
+// Your API endpoint
+const API_URL = "https://filesharingapp-1-k4ij.onrender.com"
 
 const Receive = ({ onUpdate }) => {
   const [token, setToken] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [downloadStarted, setDownloadStarted] = useState(false)
+  const [files, setFiles] = useState([])
 
   const handleTokenSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    setErrorMessage("") // Clear previous errors
-    setDownloadStarted(false)
+    setErrorMessage("")
+    setFiles([])
 
     if (!token.trim()) {
       setErrorMessage("Token cannot be empty")
@@ -26,37 +28,37 @@ const Receive = ({ onUpdate }) => {
     }
 
     try {
-      // First check if the token is valid without redirecting
-      const checkResponse = await fetch(`${API_URL}/rec?token=${token}`, {
-        method: "HEAD",
-      })
-
-      if (!checkResponse.ok) {
-        if (checkResponse.status === 404) {
-          throw new Error("Invalid token. Please check and try again.")
-        } else if (checkResponse.status === 410) {
-          throw new Error("This file has expired and is no longer available.")
-        } else {
-          throw new Error(`Server error: ${checkResponse.status}`)
-        }
+      const response = await fetch(`${API_URL}/rec?token=${token}`)
+      if (!response.ok) {
+        throw new Error("Invalid token or file expired.")
       }
 
-      // If token is valid, start the download
-      setDownloadStarted(true)
+      const blob = await response.blob()
 
-      // Use window.location to trigger the download
-      window.location.href = `${API_URL}/rec?token=${token}`
+      // Use JSZip to extract the files
+      const zip = await JSZip.loadAsync(blob)
 
-      // Reset the token after successful download initiation
-      setTimeout(() => {
-        setToken("")
-        setIsLoading(false)
-      }, 2000)
+      const extractedFiles = []
+      zip.forEach(async (relativePath, file) => {
+        if (!file.dir) {
+          const fileData = await file.async("blob")
+          extractedFiles.push({ name: relativePath, blob: fileData })
+          setFiles(prev => [...prev, { name: relativePath, blob: fileData }])
+        }
+      })
+
     } catch (error) {
-      console.error("Error downloading ZIP:", error)
-      setErrorMessage(error.message || "An error occurred. Please check the token and try again.")
+      console.error("Error processing ZIP:", error)
+      setErrorMessage(error.message || "Failed to fetch files.")
+    } finally {
       setIsLoading(false)
     }
+  }
+
+  const downloadAll = () => {
+    files.forEach(file => {
+      saveAs(file.blob, file.name)
+    })
   }
 
   return (
@@ -67,36 +69,43 @@ const Receive = ({ onUpdate }) => {
 
       <div className="input">
         <h1 className="heading">Receive Files</h1>
+
         <form onSubmit={handleTokenSubmit} className="form-container">
           <div className="input-container">
-            <label htmlFor="token" className="label">
-              Enter your token
-            </label>
+            <label htmlFor="token" className="label">Enter your token</label>
             <input
               type="text"
               id="token"
               value={token}
               onChange={(e) => setToken(e.target.value)}
               className="input2"
-              placeholder="Enter the file access token (e.g., ABCD-EFGH-IJKL)"
+              placeholder="Enter the file access token"
               required
             />
           </div>
 
-          {/* Show error message */}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          {/* Show success message */}
-          {downloadStarted && (
-            <p className="success-message">
-              Download started! If it doesn't begin automatically, please check your browser settings.
-            </p>
-          )}
-
           <button type="submit" disabled={isLoading} className="submit-button">
-            {isLoading ? "Verifying..." : "Access Files"}
+            {isLoading ? "Loading..." : "Access Files"}
           </button>
         </form>
+
+        {files.length > 0 && (
+          <>
+            <h2 className="heading">Files Ready:</h2>
+            <ul className="file-list">
+              {files.map((file, index) => (
+                <li key={index}>
+                  {file.name}
+                </li>
+              ))}
+            </ul>
+            <button className="submit-button" onClick={downloadAll}>
+              Download All Files
+            </button>
+          </>
+        )}
       </div>
     </>
   )
