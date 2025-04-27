@@ -69,7 +69,7 @@ const Receive = ({ onUpdate }) => {
 
       <div className="input">
         <h1 className="heading">Receive Files</h1>
-
+      {files.length==0 &&(
         <form onSubmit={handleTokenSubmit} className="form-container">
           <div className="input-container">
             <label htmlFor="token" className="label">Enter your token</label>
@@ -81,7 +81,7 @@ const Receive = ({ onUpdate }) => {
               className="input2"
               placeholder="Enter the file access token"
               required
-            />
+              />
           </div>
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
@@ -91,20 +91,33 @@ const Receive = ({ onUpdate }) => {
           </button>
         </form>
 
+)}
         {files.length > 0 && (
           <>
-            <h2 className="heading">Files Ready:</h2>
-            <ul className="file-list">
-              {files.map((file, index) => (
-                <li key={index}>
-                  {file.name}
-                </li>
-              ))}
-            </ul>
-            <button className="submit-button" onClick={downloadAll}>
-              Download All Files
-            </button>
-          </>
+           <h2
+             style={{
+               fontSize: "25px",
+               // Green color for the button
+             }}
+             className="heading"
+           >
+             Files Ready
+           </h2>
+
+           <button
+             style={{
+               padding: "5px",
+               fontSize: "16px",
+               // Green color for the button
+
+               cursor: "pointer",
+             }}
+             className="submit-button"
+             onClick={downloadAll}
+           >
+             Download All Files
+           </button>
+         </>
         )}
       </div>
     </>
