@@ -6,6 +6,7 @@ import "./App.css"
 import Home from "./Home"
 import Recieve from "./Recieve"
 import Upload from "./Upload"
+import { useEffect } from 'react';
 
 function App() {
   const [show, setshow] = useState("Home")
