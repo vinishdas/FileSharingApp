@@ -10,6 +10,15 @@ import Upload from "./Upload"
 function App() {
   const [show, setshow] = useState("Home")
 
+
+  useEffect(() => {
+    // Replace with your actual Render server URL
+    fetch('https://filesharingapp-1-k4ij.onrender.com/wake-up')
+      .then(response => response.text())
+      .then(data => console.log('Server response:', data))
+      .catch(error => console.error('Error waking up server:', error));
+  }, []);
+
   const UpdateUser = (newvalue) => {
     console.log("Switching to:", newvalue)
     setshow(newvalue)

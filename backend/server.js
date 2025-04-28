@@ -132,6 +132,12 @@ app.post('/upload', upload.array('files', 5), async (req, res) => {
     }
 });
 
+app.get('/wake-up', (req, res) => {
+    console.log('Received wake-up call!');
+    res.status(200).send('Server is awake!');
+  });
+
+
 // Download endpoint (updated for private Supabase bucket)
 app.get('/rec', async (req, res) => {
   try {
