@@ -7,7 +7,7 @@ import JSZip from "jszip"
 import { saveAs } from "file-saver"
 
 // Your API endpoint
-const API_URL = "https://filesharingapp-1-k4ij.onrender.com"
+const API_URL = "https://filesharingapp-ae2l.onrender.com"
 
 const Receive = ({ onUpdate }) => {
   const [token, setToken] = useState("")
