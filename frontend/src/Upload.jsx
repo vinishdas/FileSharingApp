@@ -4,7 +4,7 @@ import "./App.css"
 import { useState } from "react"
 
 // Get the API URL from environment variables or use a default
-const API_URL = "https://filesharingapp-1-k4ij.onrender.com"
+const API_URL = "https://filesharingapp-ae2l.onrender.com"
 
 export default function Upload({ onUpdate }) {
   const [files, setFiles] = useState([])
