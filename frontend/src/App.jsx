@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     // Replace with your actual Render server URL
-    fetch('https://filesharingapp-ae2l.onrender.com')
+    fetch('https://filesharingapp-ae2l.onrender.com/wake-up')
       .then(response => response.text())
       .then(data => console.log('Server response:', data))
       .catch(error => console.error('Error waking up server:', error));
